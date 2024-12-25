@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DATA MAHASISWA</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="/">My Website</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link text-white" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/mhs">Mahasiswa</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <h1 class="text-center mt-4">DATA MAHASISWA</h1>
+    <div class="container mt-4">
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>id_mahasiswa</th>
+                    <th>username</th>
+                    <th>password</th>
+                    <th>email</th>
+                    <th>alamat</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in mahasiswa %}
+                <tr>
+                    <td>{{ m[0] }}</td> 
+                    <td>{{ m[1] }}</td> 
+                    <td>{{ m[2] }}</td> 
+                    <td>{{ m[3] }}</td> 
+                    <td>{{ m[4] }}</td>
+                    <td>
+                        <a href="/update_mahasiswa/{{ m[0] }}">Update</a>
+                        <form action="/delete_mahasiswa/{{ m[0] }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-link text-danger">Delete</button>
+                        </form>
+                    </td>                   
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container mt-4">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+    <div class="container mt-4">
+        <h2>Tambah Mahasiswa</h2>
+        <form action="/add_mahasiswa" method="POST">
+            <div class="form-group">
+                <label for="id_mahasiswa">ID Mahasiswa</label>
+                <input type="number" class="form-control" id="id_mahasiswa" name="id_mahasiswa" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="alamat">Alamat</label>
+                <input type="text" class="form-control" id="alamat" name="alamat" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Tambah Mahasiswa</button>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
