@@ -2,6 +2,7 @@ from flask_mysqldb import MySQL
 from flask import Flask, render_template, request, redirect, url_for, flash
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key_here' 
 
 app.config["MYSQL_HOST"] = "localhost"
 app.config["MYSQL_USER"] = "root"
@@ -78,21 +79,28 @@ def update_mahasiswa(id):
         password = request.form['password']
         email = request.form['email']
         alamat = request.form['alamat']
-        
-        # Update data mahasiswa di database
+
         curr.execute("UPDATE mahasiswa SET username=%s, password=%s, email=%s, alamat=%s WHERE id_mahasiswa=%s", 
                      (username, password, email, alamat, id))
         mysql.connection.commit()
         curr.close()
         flash("Data mahasiswa berhasil diperbarui.", "success")
         return redirect(url_for('mhs'))
-    
-    # Jika metode GET, ambil data mahasiswa untuk ditampilkan di form
+
     curr.execute("SELECT * FROM mahasiswa WHERE id_mahasiswa=%s", (id,))
     mahasiswa = curr.fetchone()
     curr.close()
     
     return render_template('update.html', mahasiswa=mahasiswa)
+
+@app.route("/delete_mahasiswa/<int:id>", methods=['POST'])
+def delete_mahasiswa(id):
+    curr = mysql.connection.cursor()
+    curr.execute("DELETE FROM mahasiswa WHERE id_mahasiswa=%s", (id,))
+    mysql.connection.commit()
+    curr.close()
+    flash("Data mahasiswa berhasil dihapus.", "success")
+    return redirect(url_for('mhs'))
 
 if __name__ == '__main__':
     app.run(debug=True)
